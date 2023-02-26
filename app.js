@@ -1,8 +1,11 @@
 function App() {
+
+  const [initSess, setInitSess] = React.useState(25)
+  const [initBreak, setInitBreak] = React.useState(5)
   const [secondsS, setSecondsS] = React.useState(0);
-  const [minutesS, setMinutesS] = React.useState(25);
+  const [minutesS, setMinutesS] = React.useState(initSess);
   const [secondsB, setSecondsB] = React.useState(0);
-  const [minutesB, setMinutesB] = React.useState(5);
+  const [minutesB, setMinutesB] = React.useState(initBreak);
   const [status, setStatus] = React.useState("off");
   const [session, setSession] = React.useState("Session");
   const [displaySec, setDisplaySec] = React.useState(secondsS);
@@ -11,20 +14,22 @@ function App() {
   React.useEffect(() => {
     if (status == "on") {
       if (session == "Session") {
-        const count = setInterval(() => {
+        var count = setInterval(() => {
           setSecondsS((prevSecondsS) => prevSecondsS - 1);
         }, 1000);
 
-        return () => clearInterval(count);
+        return () => clearinterval(count)   
       } else {
-        const count = setInterval(() => {
+        var count = setInterval(() => {
           setSecondsB((prevSecondsB) => prevSecondsB - 1);
         }, 1000);
 
-        return () => clearInterval(count);
+        return () => clearinterval(count)  
       }
     }
   }, [status, session]);
+
+  
 
   React.useEffect(() => {
     if (session == "Session") {
@@ -48,21 +53,29 @@ function App() {
 
   const addMinuteS = () => {
     setMinutesS((prevMinutesS) => prevMinutesS + 1);
+    setInitSess((prevInitSess) => prevInitSess +1);
+    setSecondsS(0)
   };
   const subtractMinuteS = () => {
     if (minutesS == 1) {
     } else {
       setMinutesS((prevMinutesS) => prevMinutesS - 1);
+      setInitSess((prevInitSess) => prevInitSess -1);
+      setSecondsS(0)
     }
   };
 
   const addMinuteB = () => {
     setMinutesB((prevMinutesB) => prevMinutesB + 1);
+    setInitBreak((prevInitBreak) => prevInitBreak +1);
+    setSecondsB(0)
   };
   const subtractMinuteB = () => {
     if (minutesB == 1) {
     } else {
       setMinutesB((prevMinutesB) => prevMinutesB - 1);
+      setInitBreak((prevInitBreak) => prevInitBreak -1);
+      setSecondsB(0)
     }
   };
 
@@ -76,7 +89,7 @@ function App() {
     } else if (secondsS == 0 && minutesS == 0 && session == "Session") {
       setSession("Break");
     } else if (secondsB == 0 && minutesB == 0 && session == "Break") {
-      clearInterval(count);
+      reset()
     }
   }
 
@@ -86,7 +99,11 @@ function App() {
     setSecondsS(0);
     setSecondsB(0);
     setStatus("off");
+    setInitSess(25);
+    setInitBreak(5);
   }
+
+  
 
   return (
     <div id="container" className="text-center">
@@ -95,6 +112,9 @@ function App() {
       <h1>{minutesB + ":" + secondsB}</h1>
       <div id="time-left">{session}</div>
       <h1>{displayMin + ":" + displaySec}</h1>
+      <h1>{initSess}</h1>
+      <h1>{initBreak}</h1>
+      
 
       <button id="start_stop" onClick={handleClick}>
         Start/Stop
@@ -103,7 +123,7 @@ function App() {
       <div id="session">
         <div id="session-label">Session Length</div>
         <div id="session-length">25</div>
-        <button id="session-increment" onClick={addMinuteS}>
+        <button id="session-increment" onClick= {addMinuteS}>
           Session minute +
         </button>
         <button id="session-decrement" onClick={subtractMinuteS}>
